@@ -1,6 +1,8 @@
 const weatherForm = document.getElementById('weatherForm');
 const cityInput = document.getElementById('cityInput');
 const weatherResult = document.getElementById('weatherResult');
+const themeToggle = document.getElementById('themeToggle');
+const offlineAlert = document.getElementById('offlineAlert');
 
 weatherForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -11,7 +13,10 @@ weatherForm.addEventListener('submit', (e) => {
 });
 
 async function fetchWeather(city) {
-  weatherResult.innerHTML = '<p class="text-lg text-white animate-pulse">Loading...</p>';
+  weatherResult.innerHTML = `
+    <div class="flex justify-center items-center">
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
+    </div>`;
   try {
     const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
     if (!geoResponse.ok) throw new Error('Failed to fetch location data.');
@@ -27,6 +32,8 @@ async function fetchWeather(city) {
     displayWeather(name, country, weatherData.current_weather);
   } catch (error) {
     weatherResult.innerHTML = `<p class="text-red-400 text-lg">${error.message}</p>`;
+  } finally {
+    cityInput.focus();
   }
 }
 
@@ -37,7 +44,7 @@ function displayWeather(cityName, country, weather) {
   weatherResult.innerHTML = `
     <div class="fade-in">
       <h2 class="text-2xl font-bold">${cityName}, ${country}</h2>
-      <div class="flex justify-center items-center mt-4">
+      <div class="flex flex-col sm:flex-row justify-center items-center mt-4 text-left gap-4">
         <div class="icon mr-4">${weatherIcon}</div>
         <div>
           <p class="text-xl">🌡 Temperature: <strong>${weather.temperature}°C</strong></p>
@@ -50,7 +57,6 @@ function displayWeather(cityName, country, weather) {
 }
 
 function getWeatherIcon(code) {
-  // Basic mapping (can be expanded)
   if ([0].includes(code)) return '☀️';
   if ([1, 2].includes(code)) return '⛅';
   if ([3].includes(code)) return '☁️';
@@ -66,27 +72,27 @@ function getWeatherIcon(code) {
 
 function getWeatherDescription(code) {
   const descriptions = {
-    0: "Clear sky",
-    1: "Mainly clear",
-    2: "Partly cloudy",
-    3: "Overcast",
-    45: "Fog",
-    48: "Depositing rime fog",
-    51: "Light drizzle",
-    53: "Moderate drizzle",
-    55: "Dense drizzle",
-    61: "Light rain",
-    63: "Moderate rain",
-    65: "Heavy rain",
-    66: "Light freezing rain",
-    67: "Heavy freezing rain",
-    71: "Slight snow",
-    73: "Moderate snow",
-    75: "Heavy snow",
-    80: "Rain showers",
-    81: "Moderate showers",
-    82: "Violent showers",
+    0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+    45: "Fog", 48: "Depositing rime fog", 51: "Light drizzle", 53: "Moderate drizzle", 55: "Dense drizzle",
+    61: "Light rain", 63: "Moderate rain", 65: "Heavy rain",
+    66: "Light freezing rain", 67: "Heavy freezing rain",
+    71: "Slight snow", 73: "Moderate snow", 75: "Heavy snow",
+    80: "Rain showers", 81: "Moderate showers", 82: "Violent showers",
     95: "Thunderstorm"
   };
   return descriptions[code] || "Weather condition unavailable.";
 }
+
+// Theme Toggle
+themeToggle.addEventListener('click', () => {
+  document.documentElement.classList.toggle('dark');
+});
+
+// Offline Indicator
+window.addEventListener('online', () => {
+  offlineAlert.classList.add('hidden');
+});
+window.addEventListener('offline', () => {
+  offlineAlert.classList.remove('hidden');
+});
+if (!navigator.onLine) offlineAlert.classList.remove('hidden');
