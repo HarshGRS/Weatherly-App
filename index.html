@@ -7,6 +7,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -15,6 +20,12 @@
       background-position: center;
       background-repeat: no-repeat;
       min-height: 100vh;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        background-position: top;
+      }
     }
 
     .fade-in {
@@ -37,34 +48,46 @@
     }
   </style>
 </head>
-<body class="flex flex-col justify-between min-h-screen items-center p-4">
-  <div class="bg-white bg-opacity-20 backdrop-blur-md rounded-xl shadow-2xl p-8 max-w-md w-full mt-10 border border-white/30">
-    <h1 class="text-white text-4xl font-bold mb-6 text-center tracking-wide animate-pulse">🌍 WeAtHrLy</h1>
-    <form id="weatherForm" class="flex mb-6">
+<body class="flex flex-col justify-between min-h-screen items-center px-4 sm:px-8 py-6 transition duration-300 bg-gray-100 dark:bg-gray-900">
+  <div class="w-full max-w-md sm:max-w-xl mt-10 bg-white/30 dark:bg-black/30 backdrop-blur-md rounded-xl shadow-2xl p-6 sm:p-8 border border-white/30 dark:border-gray-600">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-white dark:text-gray-100 text-3xl sm:text-4xl font-bold text-center w-full animate-pulse">🌍 WeAtHrLy</h1>
+      <button id="themeToggle" class="absolute right-6 text-white dark:text-yellow-400" title="Toggle Theme">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+    <form id="weatherForm" class="flex flex-col sm:flex-row gap-3 sm:gap-0 mb-6">
       <input
         type="text"
         id="cityInput"
         placeholder="🔍 Enter City Name"
-        class="flex-grow rounded-l-md p-3 text-gray-800 focus:outline-none shadow-inner"
+        class="flex-grow rounded-md sm:rounded-l-md p-3 text-gray-800 dark:text-white bg-white dark:bg-gray-800 focus:outline-none shadow-inner"
         required
       />
       <button
         type="submit"
-        class="bg-indigo-700 hover:bg-indigo-800 text-white px-5 rounded-r-md transition-all duration-300 font-semibold"
+        class="bg-indigo-700 hover:bg-indigo-800 text-white px-5 py-3 rounded-md sm:rounded-l-none sm:rounded-r-md transition-all duration-300 font-semibold"
       >
         Search
       </button>
     </form>
-    <div id="weatherResult" class="text-white text-center space-y-4 fade-in">
-      <!-- Weather info will be displayed here -->
+    <div id="offlineAlert" class="hidden text-red-400 text-center mb-4">
+      ⚠️ You are currently offline. Displaying cached data if available.
     </div>
+    <div id="weatherResult" class="text-white text-center space-y-4 fade-in"></div>
   </div>
-
-  <!-- Footer -->
-  <footer class="text-white text-sm mt-8 mb-2 text-center opacity-70">
+  <footer class="text-white dark:text-gray-400 text-sm mt-8 mb-2 text-center opacity-70">
     © 2025 <strong>HARSH RAJ SINGH</strong>, GTB4CEC. All rights reserved.
   </footer>
-
   <script src="main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(() => console.log('✅ Service Worker Registered'))
+          .catch(err => console.log('❌ SW registration failed:', err));
+      });
+    }
+  </script>
 </body>
 </html>
