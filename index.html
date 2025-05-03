@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WeAtHrLy - Real-Time Weather App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-image: url('./weatherbaground.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .icon {
+      font-size: 2rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+<body class="flex flex-col justify-between min-h-screen items-center p-4">
+  <div class="bg-white bg-opacity-20 backdrop-blur-md rounded-xl shadow-2xl p-8 max-w-md w-full mt-10 border border-white/30">
+    <h1 class="text-white text-4xl font-bold mb-6 text-center tracking-wide animate-pulse">🌍 WeAtHrLy</h1>
+    <form id="weatherForm" class="flex mb-6">
+      <input
+        type="text"
+        id="cityInput"
+        placeholder="🔍 Enter City Name"
+        class="flex-grow rounded-l-md p-3 text-gray-800 focus:outline-none shadow-inner"
+        required
+      />
+      <button
+        type="submit"
+        class="bg-indigo-700 hover:bg-indigo-800 text-white px-5 rounded-r-md transition-all duration-300 font-semibold"
+      >
+        Search
+      </button>
+    </form>
+    <div id="weatherResult" class="text-white text-center space-y-4 fade-in">
+      <!-- Weather info will be displayed here -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-white text-sm mt-8 mb-2 text-center opacity-70">
+    © 2025 <strong>HARSH RAJ SINGH</strong>, GTB4CEC. All rights reserved.
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
